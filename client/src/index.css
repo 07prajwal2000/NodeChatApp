@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.scrollbar-hide::-webkit-scrollbar {
+	display: none;
+}
+
+/* For IE, Edge and Firefox */
+.scrollbar-hide {
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
+}
+
+/* width */
+.custom-scrollbar::-webkit-scrollbar {
+	width: 8px;
+}
+
+/* Track */
+.custom-scrollbar::-webkit-scrollbar-track {
+	@apply bg-neutral-800;
+}
+
+/* Handle */
+.custom-scrollbar::-webkit-scrollbar-thumb {
+	@apply bg-neutral-600 rounded-lg;
+}
+
+/* Handle on hover */
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+	@apply bg-neutral-700;
+}
