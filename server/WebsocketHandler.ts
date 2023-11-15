@@ -1,10 +1,9 @@
 import { Server, Socket } from "socket.io";
-import { DefaultEventsMap } from "socket.io/dist/typed-events";
 import { IChannelService } from "./services/channelService";
 import { ServerSentEvents, MessageTypes, ClientRequest, clientRequestSchema } from "./types/globalTypes";
 import { CreateChannelDto, GetMessagesFromChannelDto, JoinChannelDto, SendMessageToChannelDto, createChannelSchema, getMessagesFromChannelSchema, joinChannelSchema, sendMessageToChannelSchema } from "./types/messageTypes";
 
-export interface ClientSocket extends Socket<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>{};
+export interface ClientSocket extends Socket<any, any, any, any>{};
 
 export default class WebsocketHandler {
   private wsServer: Server;
