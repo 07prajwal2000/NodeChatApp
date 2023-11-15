@@ -6,7 +6,7 @@ import {
 } from "./types/globalTypes";
 import { CreateChannelDto, JoinChannelDto, MessageType, SendMessageToChannelDto } from "./types/messageTypes";
 
-const URL = import.meta.env.VITE_SERVER_DOMAIN || "http://localhost:3000";
+const URL = import.meta.env.VITE_SERVER_DOMAIN;
 
 let websocketClient: Socket<any, any> = io(URL);
 

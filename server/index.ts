@@ -4,6 +4,8 @@ import { createServer } from "node:http";
 import { CreateChannelService } from "./factory/serviceFactory";
 import WebsocketHandler from "./WebsocketHandler";
 
+const port = process.env.PORT || 3000;
+
 const app = express();
 const server = createServer(app);
 const ws = new Server(server, {
@@ -25,4 +27,4 @@ wsHandler.Initialize();
 app.get("/test", (req: Request, res: Response) => {
   res.json({hello: 'world'});
 });
-server.listen(3000, () => console.log("listening on http://localhost:3000"));
+server.listen(port, () => console.log("listening on http://localhost:3000"));
