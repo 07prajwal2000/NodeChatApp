@@ -5,12 +5,13 @@ import { CreateChannelService } from "./factory/serviceFactory";
 import WebsocketHandler from "./WebsocketHandler";
 
 const port = process.env.PORT || 3000;
+const origins = process.env.CORS_ORIGINS || 'http://localhost:5173';
 
 const app = express();
 const server = createServer(app);
 const ws = new Server(server, {
   cors: {
-    origin: ['*'],
+    origin: origins.split(','),
     methods: ['GET', 'POST', 'PUT', 'DELETE']
   },
 });
