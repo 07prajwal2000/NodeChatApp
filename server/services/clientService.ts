@@ -1,11 +1,12 @@
+import { ServerSentEvents } from "../types/globalTypes";
+import { MessageType } from "../types/messageTypes";
 import { ClientSocket } from "../WebsocketHandler";
-
 export interface IClientService {
 	RemoveClient(client: ClientSocket): boolean;
 	AddClient(client: ClientSocket): boolean;
-	BroadcastMessage(message: any, connections: ClientSocket[]): number;
+	BroadcastMessage(message: MessageType, connections: ClientSocket[]): number;
 	GetClient(id: string): ClientSocket | null;
-	SendToClient(id: string, message: any): boolean;
+	SendToClient(id: string, message: MessageType): boolean;
 	IsConnected(id: string): boolean;
 }
 
@@ -28,10 +29,11 @@ export default class ClientService implements IClientService {
 		return contains;
 	}
 
-	public BroadcastMessage(message: any, connections: ClientSocket[]): number {
+	public BroadcastMessage(message: MessageType, connections: ClientSocket[]): number {
 		let sendCount = 0;
 
 		connections.forEach((conn) => {
+			if (conn.id == message?.userId) return;
 			if (!this.SendToClient(conn.id, message)) {
 				return;
 			}
@@ -48,7 +50,7 @@ export default class ClientService implements IClientService {
 		return null;
 	}
 
-	public SendToClient(id: string, message: any): boolean {
+	public SendToClient(id: string, message: MessageType): boolean {
 		if (!(id in this.connectedClients)) {
 			return false;
 		}
@@ -57,7 +59,7 @@ export default class ClientService implements IClientService {
 			this.RemoveClient(client);
 			return false;
 		}
-		client.send(message);
+		client.emit(ServerSentEvents.CHANNEL_SEND_MESSAGE, message);
 		return true;
 	}
 

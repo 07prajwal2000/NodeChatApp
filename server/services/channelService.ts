@@ -4,7 +4,7 @@ import { randomID } from "../utils/randomGen";
 import { IClientService } from "./clientService";
 
 export interface IChannelService {
-	CreateChannel(title: string, desc: string, owner: ClientSocket): void;
+	CreateChannel(title: string, desc: string, owner: ClientSocket): string;
 	JoinChannel(channelId: string, client: ClientSocket): boolean;
 	SendMessageToChannel(
 		channelId: string,
@@ -14,15 +14,20 @@ export interface IChannelService {
 	GetMessagesFromChannel(channelId: string): MessageType[];
 	RemoveClientFromChannel(channelId: string, userId: string): boolean;
 	GenerateChannelId(): string;
-  clientService: IClientService;
+	GetChannelDetails(channelId: string): {
+		title: string;
+		description: string;
+		messages: MessageType[];
+	} | null;
+	clientService: IClientService;
 }
 
 type ChannelType = {
 	[id: string]: {
 		title: string;
 		description: string;
-		connections: ClientSocket[];
 		messages: MessageType[];
+		connections: ClientSocket[];
 	};
 };
 
@@ -34,7 +39,20 @@ export default class ChannelService implements IChannelService {
 		this.clientService = clientService;
 	}
 
-	public CreateChannel(title: string, desc: string, owner: ClientSocket) {
+	public GetChannelDetails(channelId: string): { title: string; description: string; messages: MessageType[]; } | null {
+		if (!this.channels[channelId]) return null;
+		return {
+			title: this.channels[channelId].title,
+			description: this.channels[channelId].description,
+			messages: this.channels[channelId].messages
+		};
+	}
+
+	public CreateChannel(
+		title: string,
+		desc: string,
+		owner: ClientSocket
+	): string {
 		const channelId = this.GenerateChannelId();
 
 		this.channels[channelId] = {
@@ -43,6 +61,7 @@ export default class ChannelService implements IChannelService {
 			connections: [owner],
 			messages: [],
 		};
+		return channelId;
 	}
 
 	public JoinChannel(channelId: string, client: ClientSocket): boolean {
@@ -60,13 +79,14 @@ export default class ChannelService implements IChannelService {
 	): boolean {
 		const channel = this.channels[channelId];
 		if (!channel) return false;
-		this.clientService.BroadcastMessage(message, channel.connections);
-		channel.messages.push({
-			message: message,
-			userId: userId,
+		const msg: MessageType = {
 			channelId: channelId,
+			message,
+			userId,
 			time: Date.now(),
-		});
+		};
+		this.clientService.BroadcastMessage(msg, channel.connections);
+		channel.messages.push(msg);
 		if (channel.messages.length > 100) {
 			channel.messages.pop();
 		}

@@ -1,15 +1,28 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import { Server } from "socket.io";
 import { createServer } from "node:http";
-import WebsocketHandler from "./WebsocketHandler";
 import { CreateChannelService } from "./factory/serviceFactory";
-import { randomID } from "./utils/randomGen";
+import WebsocketHandler from "./WebsocketHandler";
 
 const app = express();
 const server = createServer(app);
-const ws = new Server(server);
-
+const ws = new Server(server, {
+  cors: {
+    origin: ['http://localhost:5173'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE']
+  },
+});
+app.use((_, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
+  res.setHeader("Access-Control-Allow-Headers", "*");
+  res.setHeader("Access-Control-Allow-Methods", "*");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  next();
+});
 const wsHandler = new WebsocketHandler(ws, CreateChannelService());
 wsHandler.Initialize();
 
-app.listen(3000, () => console.log("listening on http://localhost:3000"));
+app.get("/test", (req: Request, res: Response) => {
+  res.json({hello: 'world'});
+});
+server.listen(3000, () => console.log("listening on http://localhost:3000"));

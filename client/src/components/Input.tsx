@@ -15,7 +15,7 @@ const Input: FC<InputPropTypes> = (props) => {
 	);
 };
 
-interface TextAreaPropTypes extends HTMLAttributes<HTMLTextAreaElement> {
+interface TextAreaPropTypes extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   value?: string;
 }
 
