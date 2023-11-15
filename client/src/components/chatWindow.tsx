@@ -10,7 +10,6 @@ import ChannelInfoModal from "./modals/channelInfoModal";
 const ChatWindow = () => {
 	const { currentChannelId, channels } = useGlobalStore();
 	const [currentMsg, setCurrentMsg] = useState("");
-	const [messages, _] = useState(currentChannelId ? channels[currentChannelId!].messages : []);
 	const messagesContainer = useRef<any>();
 	const { sendMessageToChannel } = useWebsocketContext()!;
 

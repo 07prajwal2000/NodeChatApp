@@ -1,6 +1,5 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { XIcon } from "lucide-react";
-import { useRef } from "react";
 import useGlobalStore from "../../store/globalStore";
 
 const ChannelInfoModal = ({ children }: { children?: React.ReactNode }) => {

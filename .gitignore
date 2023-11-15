@@ -3,4 +3,5 @@
 **/.vscode
 **/.jetbrains
 **/package-lock.json
-**/.env**
+**/.env
+**/dist

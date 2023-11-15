@@ -8,12 +8,12 @@ const app = express();
 const server = createServer(app);
 const ws = new Server(server, {
   cors: {
-    origin: ['http://localhost:5173'],
+    origin: ['*'],
     methods: ['GET', 'POST', 'PUT', 'DELETE']
   },
 });
 app.use((_, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
+  res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Headers", "*");
   res.setHeader("Access-Control-Allow-Methods", "*");
   res.setHeader("Access-Control-Allow-Credentials", "true");

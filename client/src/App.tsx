@@ -26,7 +26,6 @@ export const useWebsocketContext = () => useContext(WebsocketContext);
 
 const App = () => {
 	const { setUserId, addMessage, userId, addChannel } = useGlobalStore();
-
 	useEffect(() => {
 		ConnectToServer();
 		registerEvents();
